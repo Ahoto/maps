@@ -14,14 +14,49 @@
  * limitations under the License.
  */
 
-const googleMapsAPIKey = 'YOUR API KEY';
+import { GoogleMapsOverlay } from "@deck.gl/google-maps";
+import { ScatterplotLayer } from "@deck.gl/layers";
+
+
+
+const googleMapsAPIKey = 'AIzaSyDiAdXhyvPKVWQMkfbyrSvjkw7vd_40AxQ';
 loadJSAPI(); // loads the Maps JS API - see helper function below
+
+// const layerOptions = {
+//   id: 'scatter-plot',
+//   data: './stations.json',
+//   getPosition: d => [parseFloat(d.longitude), parseFloat(d.latitude)],
+//   getRadius: d => parseInt(d.capacity),
+//   strocked: true,
+//   getFillColor: [255, 133, 27],
+//   getLineColor: [255, 38, 27],
+//   radiusMinPixels: 5,
+//   radiusMaxPixels: 50
+// };
+
+const scatterplotLayer = new ScatterplotLayer(layerOptions);
 
 // initialize the map and executes your code
 // once the API has loaded
 function runApp() {
-  initMap();
+  const map = initMap();
   // Your code goes here
+  const layerOptions = {
+    id: 'scatter-plot',
+    data: './stations.json',
+    getPosition: d => [parseFloat(d.longitude), parseFloat(d.latitude)],
+    getRadius: d => parseInt(d.capacity),
+    strocked: true,
+    getFillColor: [255, 133, 27],
+    getLineColor: [255, 38, 27],
+    radiusMinPixels: 5,
+    radiusMaxPixels: 50
+  };
+  const scatterplotLayer = new ScatterplotLayer(layerOptions);
+  const googleMapsOverlay = new GoogleMapsOverlay({
+    layers: [scatterplotLayer]
+  });
+  googleMapsOverlay.setMap(map);
 }
 
 /* API and map loader helpers */
